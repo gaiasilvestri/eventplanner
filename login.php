@@ -9,3 +9,6 @@ size="18"></p>
 
 <p>Or sign up for Shejul <a href="http://www.ugrad.cs.ubc.ca/~j8d7/304signup.php/">here!</a> </p>
 </form>
+
+<!--TODO
+    write PHP to interface w/ Users table-->
