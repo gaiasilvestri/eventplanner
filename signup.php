@@ -8,9 +8,8 @@ password</font></p>
 
 <!--refresh page when submit-->
 
-<p><input type="text" name="insNo" size="6">
-<input type="text" name="insName" 
-size="18"></p>
+<p><input type="text" name="insSignInNo" size="6">
+<input type="text" name="insSignInName" size="18"></p>
 </form>
 
 <!--  TODO
