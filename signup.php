@@ -12,3 +12,6 @@ password</font></p>
 <input type="text" name="insName" 
 size="18"></p>
 </form>
+
+<!--  TODO
+      write PHP that will allow us to insert rows into Users -->
