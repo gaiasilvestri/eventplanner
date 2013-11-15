@@ -1,0 +1,100 @@
+@charset "utf-8";
+
+
+body{
+background-color:#8C8888;
+}
+
+
+#navbar {
+	width:1060px;
+	
+}
+
+#navbar #holder {
+	height:64px;
+	border-bottom:1px solid #000;
+	width:1020px;
+	padding-left:25px;
+	
+}
+
+#navbar #holder ul {
+	list-style:none; /* bullets */
+	margin:0;
+	padding:0;
+		
+}
+
+#navbar #holder ul li a {
+	text-decoration: none;	/* underline */
+	float: left; /* horizontal view */
+	margin-right: 5px; /* move objects away from another */
+	font-family: "Arial Black", Gadget, sans-serif;
+	color: #C5C5C5;
+	border: 1px solid #000;
+	border-bottom: none;
+	padding: 20px;
+	width: 150px;
+	text-align: center;
+	display: block; /* rollover will be whole block not just text */
+	background: #414141;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+#navbar #holder ul li a:hover {
+	background: #C5C5C5;
+	color:#333;
+	text-shadow:1px 1px 1px #000
+}
+
+#holder ul li a#onlink{
+	background:#2C2C2C;
+	color:#C5C5C5;
+	border-bottom: 1px solid #2C2C2C;
+}
+
+#holder ul li a#onlink:hover {
+	background: #2C2C2C;
+	color: #fff;
+	text-shadow: 1px 1px 1px #000px;	
+}
+
+#search {
+
+}
+
+#search input[type="text"] {
+    background: url(search-dark.png) no-repeat 10px 6px #444;
+    border: 0 none;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #C5C5C5;
+    width: 150px;
+    padding: 6px 15px 6px 35px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+    }
+
+#search input[type="text"]:focus {
+    width: 200px;
+    }
+
+table, td, th{
+ border:1px solid black;
+ background-color: #414141;
+ color:#C5C5C5;
+}
+td{
+ padding:15px;
+}
+

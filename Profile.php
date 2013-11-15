@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-<link href="CSS Folder/tabMenu.css" rel="stylesheet" type="text/css" />
+<title>Profile</title>
+<link href="tabMenu.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>	
@@ -13,16 +13,18 @@
 <ul> <!-- unordered list -->
 
 
-<li><a href="Profile.html">Profile</a></li>
-<li><a href="Events.html">Events</a></li>
-<li><a href="Groups.html" id="onlink">Groups</a></li>
-<li><a href="CreateEvent.html">Create Event</a></li>
-<li><a href="Messages.html">Messages</a></li>
+<li><a href="Profile.php" id="onlink">Profile</a></li>
+<li><a href="Events.php">Events</a></li>
+<li><a href="Groups.php">Groups</a></li>
+<li><a href="Messages.php">Messages</a></li>
 
 </ul>
 </div> <!-- end holder div -->
 </div>
 <p>&nbsp;</p>
 <!-- en navbar div -->
+<div>
+<p> This will be for Profile </p>
+</div>
 </body>
 </html>

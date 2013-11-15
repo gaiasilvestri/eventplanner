@@ -1,3 +1,8 @@
+<html>
+
+<?php include 'SqlConnect.php'; ?>
+
+
 <p>Homepage</p>
 
 <p>Please choose your</p>
@@ -23,3 +28,6 @@ size="6"></p>
 	If we add interests to Users, we can have those interests on this page, and an edit link
 	It would be good to have profile picture.
 -->
+</form>
+</html>
+
