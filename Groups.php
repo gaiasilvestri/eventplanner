@@ -54,16 +54,14 @@
     <label class="sr-only" for="Description">Description</label>
     <input type="text" class="form-control" id="Description" placeholder="Description" name="description">
   </div>
-  <div class="form-group">
-    <label class="sr-only" for="Since">Since</label>
-    <input type="text" class="form-control" id="Since" placeholder="Since" name="since">
-  </div>
+
   <div class="form-group">
     <label class="sr-only" for="Manager">Your ID</label>
     <input type="text" class="form-control" id="Manager" placeholder="Manager" name="manager">
   </div>
 
   <button type="submit" class="btn btn-default" name="insertsubmit">Create Group</button>
+  <input type="hidden" name="since" value="<?php echo date("d-M-y"); ?>">
 </form>
  
 <!--  <p>Insert values into groups below:</p>
