@@ -1,45 +1,77 @@
-<!--Test Oracle file for UBC CPSC304 2011 Winter Term 2
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  This file shows the very basics of how to execute PHP commands
-  on Oracle.   
-  specifically, it will drop a table, create a table, insert values
-  update values, and then query for values
- 
-  IF YOU HAVE A TABLE CALLED "tab1" IT WILL BE DESTROYED
- 
-  The script assumes you already have a server set up
-  All OCI commands are commands to the Oracle libraries
-  To get the file to work, you must place it somewhere where your
-  Apache server can run it, and you must rename it to have a ".php"
-  extension.  You must also change the username and password on the  
-  OCILogon below to be your ORACLE username and password -->
- 
+<DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+    <title>Events</title>
+        <link href="css/bootstrap.css" media="all" rel="stylesheet" type="text/css">
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="src/js/bootstrap.js" type="text/javascript"></script>
+
+<?php include_once "Header304.php"; ?>
+</head>
+<body>
+
 <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
-<form method="POST" action="EventsHardCode.php">
+<form method="POST" action="Events.php">
     
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
  
 <p>Insert values into event below:</p>
-<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+<!--<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 Name</font></p>
-<form method="POST" action="EventsHardCode.php">
+-->
+
+<form method="POST" action="Events.php">
 <!--refresh page when submit-->
 
  <!--watch out for START TIME AND END TIME MUST BE WORKED OUT BETTER!!! -->
-   <p><input type="text" name="eid" size="9"><input type="text" name="etitle"  
+<div class="form-group">
+    <label class="sr-only" for="Event ID">Event ID</label>
+    <input type="text" class="form-control" id="Event ID" placeholder="Event ID" name="eid">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Event Title">Event Title</label>
+    <input type="text" class="form-control" id="Event Title" placeholder="Event Title" name="etitle">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Event Desc">Event Desc</label>
+    <input type="text" class="form-control" id="Event Desc" placeholder="Event Description" name="edescription">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Event Start">Event Start</label>
+    <input type="text" class="form-control" id="Event Start" placeholder="Start DD-MON-YY HH:MIPM" name="startTime">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Event End">Event End</label>
+    <input type="text" class="form-control" id="Event End" placeholder="End DD-MON-YY HH:MIPM" name="end">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Street">Street</label>
+    <input type="text" class="form-control" id="Street" placeholder="Street Address" name="street_address">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="Building">Building</label>
+    <input type="text" class="form-control" id="Building" placeholder="Building" name="building">
+  </div>
+<div class="form-group">
+    <label class="sr-only" for="">Creator</label>
+    <input type="text" class="form-control" id="Creator" placeholder="Creator(user)" name="userid">
+  </div><br>
+<button type="submit" class="btn btn-primary" value="insert" name="insertsubmit">Create Event</button>
+</form>
+
+<!--   <p><input type="text" name="eid" size="9"><input type="text" name="etitle"  
 size="300"><input type="text" name="edescription"  
 size="300"><input type="text" name="startTime"  
 size="10"><input type="text" name="end"  
 size="10"><input type="text" name="street_address"  
 size="100"><input type="text" name="building"  
 size="100"><input type="text" name="userid"  
-size="9">
+size="9"> -->
 <!--define two variables to pass the value-->
     
-<input type="submit" value="insert" name="insertsubmit"></p>
-</form>
+
 <!-- create a form to pass the values. See below for how to  
 get the values-->  
  
@@ -69,7 +101,7 @@ function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL com
     //echo "<br>running ".$cmdstr."<br>";
     global $db_conn, $success;
     $statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
-    echo "the value of the parsed string is:";
+    //echo "the value of the parsed string is:";
     var_dump($statment);
  
     if (!$statement) {
@@ -131,18 +163,15 @@ function executeBoundSQL($cmdstr, $list) {
 }
  
 function printResult($result) { //prints results from a select statement
-    echo "<br>Got data from table event:<br>";
-    echo "<table>";
-    echo "<tr><th>EventID</th><th>EventName</th></tr>";
+        echo "<br>Events<br>";
+    echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Event ID</th><th>Event Title</th><th>Creator</th></tr>";
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-       echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td></tr>"; //or just use "echo $row[0]"
-       echo "the value of row in the loop is:";
-       var_dump($row);  
+       echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
+
     }
-    echo "the value of row after the loop is:";
-    var_dump($row);
     echo "</table>";
- 
+
 }
  
 // Connect Oracle...
@@ -177,7 +206,7 @@ if ($db_conn) {
           $alltuples = array (
              $tuple
           );
-          executeBoundSQL("insert into event values (:bind1, :bind2, :bind3, :bind4, :bind5, :bind6, :bind7, :bind8)", $alltuples);
+          executeBoundSQL("insert into event values (:bind1, :bind2, :bind3, TO_DATE(:bind4, 'DD-MON-YY HH:MIPM'), TO_DATE(:bind5, 'DD-MON-YY HH:MIPM'), :bind6, :bind7, :bind8)", $alltuples);
           OCICommit($db_conn);
  
        } else
@@ -244,12 +273,12 @@ if ($db_conn) {
                 OCICommit($db_conn);
              }
  
-    if ($_POST && $success) {
+    if ($_POST && !$success) {
        //POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-       header("location: EventsHardCode.php");
+       header("location: failed.php");
     } else {
        // Select data...
-       $result = executePlainSQL("select * from event");
+       $result = executePlainSQL("select eid, etitle, u.username from event e, users u where u.userid = e.userid");
        printResult($result);
        echo "did we do it?";
     }
@@ -261,3 +290,6 @@ if ($db_conn) {
     $e = OCI_Error(); // For OCILogon errors pass no handle
     echo htmlentities($e['message']);
 }
+?>
+
+</html>

@@ -22,18 +22,10 @@
         <link href="css/bootstrap.css" media="all" rel="stylesheet" type="text/css">
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="src/js/bootstrap.js" type="text/javascript"></script>
+<?php include_once "Header304.php"; ?>
 </head>
 
 <body>
-
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-   <ul class="nav navbar-nav">
-  <li><a href="Profile.php">Profile</a></li>
-  <li><a href="Events.php">Events</a></li>
-  <li class="active"><a href="Events.php">Groups</a></li>
-  <li><a href ="Messages.php">Messages</a></li>
-  <ul>
-</nav>
 
 <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 <form method="POST" action="Groups.php">
@@ -62,6 +54,7 @@
 
   <button type="submit" class="btn btn-default" name="insertsubmit">Create Group</button>
   <input type="hidden" name="since" value="<?php echo date("d-M-y"); ?>">
+
 </form>
  
 <!--  <p>Insert values into groups below:</p>
@@ -194,11 +187,14 @@ if ($db_conn) {
        // Drop old table...
        echo "<br> dropping table <br>";
        executePlainSQL("Drop table groups cascade constraints");
+
  
        // Create new table...
        echo "<br> creating new table <br>";
        executePlainSQL("create table groups (gid number, gname varchar2(30), description varchar2(300), 
      since DATE, manager number(9,0),primary key (gid), foreign key (manager) references users(userid))");
+   
+
        OCICommit($db_conn);
  
     } else
@@ -269,7 +265,7 @@ if ($db_conn) {
                 OCICommit($db_conn);
              }
  
-    if ($_POST && $success) {
+    if ($_POST && !$success) {
        //POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
        header("location: Groups.php");
     } else {
@@ -286,3 +282,4 @@ if ($db_conn) {
     $e = OCI_Error(); // For OCILogon errors pass no handle
     echo htmlentities($e['message']);
 }
+
