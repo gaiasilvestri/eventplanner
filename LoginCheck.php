@@ -11,13 +11,15 @@
 
 
 <?php
-include 'D2G2variables.php';
+
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 $db_conn = OCILogon("ora_p4s7", "a57854101", "ug");
 
 $checkuser;
 $checkusername;
+$checkuseremail;
+$checkuserphone;
 
 
 // username and password sent from form 
@@ -63,12 +65,15 @@ $count=countRows($result);
 
 
 function countRows($result) { //prints results from a select statement
-	global $checkuser, $checkusername;
+        global $checkuser, $checkusername, $checkuseremail, $checkuserphone;
     $i=0;
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
        $i = $i + 1;
        $checkuser = $row[0];
        $checkusername = $row[1];
+	   $checkuseremail = $row[3];
+       $checkuserphone = $row[4];
+
     }
     return $i;
  
@@ -79,7 +84,7 @@ if($count==1){
 
 // Register $myusername, $mypassword and redirect to file "login_success.php"
 
-file_put_contents('D2G2variables.php', '<?php $activeuser = ' . $checkuser . '; $activeusername = ' . $checkusername . '; ?>');
+file_put_contents('D2G2variables.php', '<?php $activeuser=' . $checkuser . '; $activeusername="' . $checkusername . '"; $activeuseremail="' . $checkuseremail . '"; $activeuserphone=' . $checkuserphone . '; ?>');
 header("location:Profile.php");
 
 }
