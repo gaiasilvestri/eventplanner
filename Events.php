@@ -7,7 +7,8 @@
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="src/js/bootstrap.js" type="text/javascript"></script>
 
-<?php include_once "Header304.php"; ?>
+<?php include_once "Header304.php";
+include_once "D2G2variables.php"; ?>
 </head>
 <body>
 
@@ -17,78 +18,56 @@
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
  
-<p>Insert values into event below:</p>
-<!--<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-Name</font></p>
--->
+
 
 <form method="POST" action="Events.php">
-<!--refresh page when submit-->
-
- <!--watch out for START TIME AND END TIME MUST BE WORKED OUT BETTER!!! -->
 <div class="form-group">
-    <label class="sr-only" for="Event ID">Event ID</label>
-    <input type="text" class="form-control" id="Event ID" placeholder="Event ID" name="eid">
+<button type="submit" class="btn btn-primary" value="Main Create" name="showcreate">Create Event View</button>
   </div>
-<div class="form-group">
-    <label class="sr-only" for="Event Title">Event Title</label>
-    <input type="text" class="form-control" id="Event Title" placeholder="Event Title" name="etitle">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="Event Desc">Event Desc</label>
-    <input type="text" class="form-control" id="Event Desc" placeholder="Event Description" name="edescription">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="Event Start">Event Start</label>
-    <input type="text" class="form-control" id="Event Start" placeholder="Start DD-MON-YY HH:MIPM" name="startTime">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="Event End">Event End</label>
-    <input type="text" class="form-control" id="Event End" placeholder="End DD-MON-YY HH:MIPM" name="end">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="Street">Street</label>
-    <input type="text" class="form-control" id="Street" placeholder="Street Address" name="street_address">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="Building">Building</label>
-    <input type="text" class="form-control" id="Building" placeholder="Building" name="building">
-  </div>
-<div class="form-group">
-    <label class="sr-only" for="">Creator</label>
-    <input type="text" class="form-control" id="Creator" placeholder="Creator(user)" name="userid">
-  </div><br>
-<button type="submit" class="btn btn-primary" value="insert" name="insertsubmit">Create Event</button>
 </form>
 
-<!--   <p><input type="text" name="eid" size="9"><input type="text" name="etitle"  
-size="300"><input type="text" name="edescription"  
-size="300"><input type="text" name="startTime"  
-size="10"><input type="text" name="end"  
-size="10"><input type="text" name="street_address"  
-size="100"><input type="text" name="building"  
-size="100"><input type="text" name="userid"  
-size="9"> -->
-<!--define two variables to pass the value-->
+<form method="POST" action="Events.php">
+<div class="form-group">
+<button type="submit" class="btn btn-primary" value="Main Show" name="showevents">Show all Events</button>
+  </div>
+</form>
+
+<form method="POST" action="Events.php">
+<div class="form-group">
+<button type="submit" class="btn btn-primary" value="Main Show" name="showmyevents">Show all Events I Created</button>
+  </div>
+</form>
+
+<form method="POST" action="Events.php">
+<div class="form-group">
+<button type="submit" class="btn btn-primary" value="Main Show" name="showattending">Show all Events I'm Attending</button>
+  </div>
+</form>
+
+<form method="POST" action="Events.php">
+<div class="form-group">
+<button type="submit" class="btn btn-primary" value="Main Search" name="searchevents">Search Events</button>
+  </div>
+</form>
     
 
 <!-- create a form to pass the values. See below for how to  
 get the values-->  
- 
+<!-- 
 <p> Update the name by inserting the old and new values below: </p>
 <p><font size="2"> Old Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-New Name</font></p>
-<form method="POST" action="EventsHardCode.php">
-<!--refresh page when submit-->
+New Name</font></p>-->
+<!--<form method="POST" action="EventsHardCode.php">-->
+<!--refresh page when submit
  
    <p><input type="text" name="oldName" size="6"><input type="text" name="newName"  
-size="18">
+size="18">-->
 <!--define two variables to pass the value-->
-    
+<!-- 
 <input type="submit" value="update" name="updatesubmit"></p>
 <input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form>
- 
+-->
 <?php
  
 //this tells the system that it's no longer just parsing  
@@ -96,13 +75,14 @@ size="18">
  
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 $db_conn = OCILogon("ora_p4s7", "a57854101", "ug");
+$arr = array();
  
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
     //echo "<br>running ".$cmdstr."<br>";
     global $db_conn, $success;
     $statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
     //echo "the value of the parsed string is:";
-    var_dump($statment);
+    
  
     if (!$statement) {
        echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
@@ -161,21 +141,230 @@ function executeBoundSQL($cmdstr, $list) {
     }
  
 }
- 
-function printResult($result) { //prints results from a select statement
-        echo "<br>Events<br>";
-    echo "<table class=\"table table-bordered\">";
-    echo "<tr><th>Event ID</th><th>Event Title</th><th>Creator</th></tr>";
+// <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+//  Launch demo modal
+//</button>
+
+function fill_the_array($arrayNew, $result){
+	global $arr;
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		array_push($arr, $row[7]);
+	}
+}
+
+function printRatings($numReviews, $minReviews, $avgReviews, $maxReviews){
+
+			 echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Number of Reviews</th><th>Min Rating</th><th>Average Rating</th><th>Maximum Rating</th></tr>";
+    while (($row = OCI_Fetch_Array($numReviews, OCI_BOTH)) && ($row1 = OCI_Fetch_Array($minReviews, OCI_BOTH)) && ($row2 = OCI_Fetch_Array($avgReviews, OCI_BOTH)) && ($row3 = OCI_Fetch_Array($maxReviews, OCI_BOTH))) {
+       echo "<tr><td>" . $row[0] . "</td><td>" . $row1[0] . "</td><td>" . $row2[0] . "</td><td>" . $row3[0] . "</td></tr>"; //or just use "echo $row[0]"
+
+    }
+    echo "</table>";
+
+}
+
+
+function printAttends($attend){
+echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Title</th><th>Description</th><th>Start</th><th>End</th><th>Building</th><th>Creator</th><th>Write Review?</th></tr>";
+    while ($row = OCI_Fetch_Array($attend, OCI_BOTH)) {
+       echo "<tr>
+<td>" . $row[0] . "</td>
+<td>" . $row[1] . "</td>
+<td>" . $row[2] . "</td>
+<td>" . $row[3] . "</td>
+<td>" . $row[4] . "</td>
+<td>" . $row[5] . "</td>
+<td> 
+       <form method=\"POST\" action=\"StillneedToImplement.php\">
+ 		<div class=\"form-group\">
+			<button type=\"submit\" class=\"btn btn-default\" name =\"writereview\"value=\"" . $row[6] . "\">Write</button>
+ </div>
+</form> </td>
+</tr>";
+
+
+}
+}
+
+function printReviews($review){
+	 echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Comments</th><th>Rating</th><th>User</th></tr>";
+    while ($row = OCI_Fetch_Array($review, OCI_BOTH)) {
        echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
 
     }
     echo "</table>";
 
 }
+
+function printResult($result) { //prints results from a select statement
+    	global $arr;
+	echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Title</th><th>Description</th><th>Start</th><th>End</th><th>Address</th><th>Building</th><th>Creator</th><th>Attend?</th></tr>";
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+    	array_push($arr, $row[7]);
+       echo "<tr>
+<td>
+<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+<button class=\"btn btn-link\" name=\"" . $row[7] . "\">"
+   . $row[0] ."
+</button>
+</div>
+</form>
+</td>
+<td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td><td>" . $row[5] . "</td><td>" . $row[6] . "</td>
+<td> 
+       <form method=\"POST\" action=\"Events.php\">
+ 		<div class=\"form-group\">
+			<button type=\"submit\" class=\"btn btn-default\" name =\"attend\"value=\"" . $row[7] . "\">Attend</button>
+  			</div>
+</form> </td>
+</tr>"; //or just use "echo $row[0]"
+
+    }
+    echo "</table>";
+
+}
+function printResultMine($result) { //prints results from the join statement (show all my events)
+    	global $arr;
+    echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Title</th><th>Description</th><th>Start</th><th>End</th><th>Address</th><th>Building</th><th>Creator</th></tr>";
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+    	array_push($arr, $row[7]);
+       echo "<tr><td>
+<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+<button class=\"btn btn-link\" name=\"" . $row[7] . "\">"
+   . $row[0] ."
+</button>
+</div>
+</form>
+</td>
+
+<td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td><td>" . $row[5] . "</td><td>" . $row[6] . "</td></tr>"; //or just use "echo $row[0]"
+
+    }
+    echo "</table>";
+
+}
+function printResultT($result) { //prints results from a select statement
+	    	global $arr;
+    echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Title</th></tr>";
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+    	array_push($arr, $row[1]);
+       echo "<tr><td>
+<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+<button class=\"btn btn-link\" name=\"" . $row[1] . "\">"
+   . $row[0] ."
+</button>
+</div>
+</form>
+</td>
+
+</tr>"; //or just use "echo $row[0]"
+
+    }
+    echo "</table>";
+
+}
+function printResultD($result) { //prints results from a select statement
+	    	global $arr;
+    echo "<table class=\"table table-bordered\">";
+    echo "<tr><th>Description</th></tr>";
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+    	array_push($arr, $row[1]);
+       echo "<tr><td>
+<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+<button class=\"btn btn-link\" name=\"" . $row[1] . "\">"
+   . $row[0] ."
+</button>
+</div>
+</form>
+</td>
+
+</tr>"; //or just use "echo $row[0]"
+
+    }
+    echo "</table>";
+
+}
+//WRITE NEW PRINT RESULT FOR ISSETJOIN
  
 // Connect Oracle...
 if ($db_conn) {
+
+$i = 0;
+
+$resultFill = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username, e.eid from event e, users u where u.userid = e.userid");
+fill_the_array($arr, $resultFill);
+foreach($arr as $ar){
+	
+	if (array_key_exists($ar, $_POST)) {
+          //executePlainSQL("delete from event where eid = " . $ar);
+			$reviews = executePlainSQL("select r.comments, r.rating, u.username from review_submit r, users u, event e where u.userid = r.userid AND r.eid = e.eid AND e.eid = " . $ar);
+			printReviews($reviews);
+          OCICommit($db_conn);
+			//header("location:adminPage.php");
+			
+			echo "<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+<input type =\"hidden\" name=\"EID\" value=" . $ar . ">
+<button type=\"submit\" class=\"btn btn-primary\" value=\"STATS\" name=\"stats\">STATS</button>
+  </div>
+</form>";
+
+       }
+       $i = $i + 1;
+}
+
+    if (array_key_exists('stats', $_POST)) {
+		echo "Made it in";
+		$temp = $_POST['EID'];
+		echo "$temp";
+		
+		
+		$numReviews = executePlainSQL("select count(*) from review_submit where eid = " . $_POST['EID']);
+		$minReviews = executePlainSQL("select min(rating) from review_submit where eid = " . $_POST['EID']);
+		$avgReviews = executePlainSQL("select AVG(rating) from review_submit where eid = " . $_POST['EID']);
+		$maxReviews = executePlainSQL("select max(rating) from review_submit where eid = " . $_POST['EID']);
+
+	printRatings($numReviews, $minReviews, $avgReviews, $maxReviews);
+
+
+}
+
+    if (array_key_exists('showattending', $_POST)) {
+      echo "attending";
+		$attendingview = executePlainSQL("select e.etitle, e.edescription, e.starttime, e.end, e.building, u.username, e.eid from event e, users u, attends a where u.userid = e.userid AND a.userid = " . $activeuser . " AND a.eid = e.eid");
+		printAttends($attendingview);
+
+}
+
+
+if (array_key_exists('attend', $_POST)) {
+    echo $activeuser;
+    $attendeid = $_POST['attend'];
+		echo $attendeid;
+
+		$attendevent = executePlainSQL("insert into attends values (" . $activeuser . "," . $attendeid . ")");
+    OCICommit($db_conn);
+
+		if(!$success){
+		echo"Success was false in attend button";
+	echo " NEED TO IMPLEMENT WHAT TO DO IF CAN'T ATTEND EVENT";
+
+}else{
+
+echo "I think you are now attending the event! great job!";
+}
+
+}
  
     if (array_key_exists('reset', $_POST)) {
        // Drop old table...
@@ -210,6 +399,80 @@ if ($db_conn) {
           OCICommit($db_conn);
  
        } else
+			if (array_key_exists('searchtitle', $_POST)){
+			
+			$term = $_POST['title'];
+
+			$result1 = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username from event e, users u where etitle like '%" . $term . "%' AND u.userid = e.userid");
+			printResult($result1);
+
+} else
+if (array_key_exists('showtitle', $_POST)){
+			
+			$term = $_POST['title'];
+
+			$result1 = executePlainSQL("select etitle, eid from event where etitle like '%" . $term . "%'");
+			printResultT($result1);
+
+}else
+if (array_key_exists('showtitle1', $_POST)){
+			
+			$term = $_POST['desc'];
+
+			$result1 = executePlainSQL("select etitle, eid from event where edescription like '%" . $term . "%'");
+			printResultT($result1);
+
+} else
+if (array_key_exists('showtitle2', $_POST)){
+			
+			$term = $_POST['location'];
+
+			$result1 = executePlainSQL("select etitle, eid from event where building like '%" . $term . "%'");
+			printResultT($result1);
+
+}else
+if (array_key_exists('showdescription', $_POST)){
+			
+			$term = $_POST['title'];
+
+			$result1 = executePlainSQL("select edescription, eid from event where etitle like '%" . $term . "%'");
+			printResultD($result1);
+
+}else
+if (array_key_exists('showdescription1', $_POST)){
+			
+			$term = $_POST['desc'];
+
+			$result1 = executePlainSQL("select edescription, eid from event where edescription like '%" . $term . "%'");
+			printResultD($result1);
+
+}else
+if (array_key_exists('showdescription2', $_POST)){
+			
+			$term = $_POST['location'];
+
+			$result1 = executePlainSQL("select edescription, eid from event where building like '%" . $term . "%'");
+			printResultD($result1);
+
+}else
+if (array_key_exists('searchdescription', $_POST)){
+			
+			$term = $_POST['desc'];
+
+			$result1 = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username from event e, users u where edescription like '%" . $term . "%' AND u.userid = e.userid");
+			printResult($result1);
+
+} else
+
+if (array_key_exists('searchlocation', $_POST)){
+			
+			$term = $_POST['location'];
+
+			$result1 = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username from event e, users u where building like '%" . $term . "%' AND u.userid = e.userid");
+			printResult($result1);
+
+} else
+
           if (array_key_exists('updatesubmit', $_POST)) {
              // Update tuple using data from user
              $tuple = array (
@@ -275,13 +538,94 @@ if ($db_conn) {
  
     if ($_POST && !$success) {
        //POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-       header("location: failed.php");
+       //header("location: failed.php");
+		echo "I FAILED AT THE BOTTOM";
     } else {
        // Select data...
-       $result = executePlainSQL("select eid, etitle, u.username from event e, users u where u.userid = e.userid");
-       printResult($result);
-       echo "did we do it?";
+       //$result = executePlainSQL("select eid, etitle, u.username from event e, users u where u.userid = e.userid");
+       //printResult($result);
+       //echo "did we do it?";
     }
+
+if (isset($_POST['searchevents'])){
+echo "Search Titles";
+echo "<form method=\"POST\" action=\"Events.php\">
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event Title\">Event Title</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Title\" placeholder=\"Event Title\" name=\"title\">
+<button type=\"submit\" class=\"btn btn-primary\" value=\"searchtitle\" name=\"searchtitle\">Show All</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showtitle\" name=\"showtitle\">Show Titles</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showdescription\" name=\"showdescription\">Show Description</button>
+	<p></p>
+	<label class=\"sr-only\" for=\"Event Description\">Event Description</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Description\" placeholder=\"Event Description\" name=\"desc\">
+<button type=\"submit\" class=\"btn btn-primary\" value=\"searchdescription\" name=\"searchdescription\">Show All</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showtitle1\" name=\"showtitle1\">Show Titles</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showdescription1\" name=\"showdescription1\">Show Description</button>
+	<p></p>
+	<label class=\"sr-only\" for=\"Event Location\">Event Location</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Building\" placeholder=\"Event Building\" name=\"location\">
+<button type=\"submit\" class=\"btn btn-primary\" value=\"searchlocation\" name=\"searchlocation\">Show All</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showtitle2\" name=\"showtitle2\">Show Titles</button>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"showdescription2\" name=\"showdescription2\">Show Description</button>
+  </div>
+
+</form>";
+
+
+}
+
+if (isset($_POST['showevents'])){
+	$result = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username, e.eid from event e, users u where u.userid = e.userid");
+       printResult($result);
+}
+if (isset($_POST['showmyevents'])){
+	$result = executePlainSQL("select etitle, edescription, startTime, end, street_address, building, u.username, e.eid from event e, users u where u.userid =" . $activeuser . " AND u.userid = e.userid");
+       printResultMine($result);
+}	
+if (isset($_POST['showcreate'])){
+
+	
+
+	echo "<form method=\"POST\" action=\"Events.php\">
+<!--refresh page when submit-->
+<p>Insert values into event below:</p>
+ <!--watch out for START TIME AND END TIME MUST BE WORKED OUT BETTER!!! -->
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event ID\">Event ID</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event ID\" placeholder=\"Event ID\" name=\"eid\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event Title\">Event Title</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Title\" placeholder=\"Event Title\" name=\"etitle\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event Desc\">Event Desc</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Desc\" placeholder=\"Event Description\" name=\"edescription\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event Start\">Event Start</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event Start\" placeholder=\"Start DD-MON-YY HH:MIPM\" name=\"startTime\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Event End\">Event End</label>
+    <input type=\"text\" class=\"form-control\" id=\"Event End\" placeholder=\"End DD-MON-YY HH:MIPM\" name=\"end\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Street\">Street</label>
+    <input type=\"text\" class=\"form-control\" id=\"Street\" placeholder=\"Street Address\" name=\"street_address\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"Building\">Building</label>
+    <input type=\"text\" class=\"form-control\" id=\"Building\" placeholder=\"Building\" name=\"building\">
+  </div>
+<div class=\"form-group\">
+    <label class=\"sr-only\" for=\"\">Creator</label>
+    <input type=\"text\" class=\"form-control\" id=\"Creator\" placeholder=\"Creator(user)\" name=\"userid\">
+  </div><br>
+<button type=\"submit\" class=\"btn btn-primary\" value=\"insert\" name=\"insertsubmit\">Create Event</button>
+</form>";
+	}
  
     //Commit to save changes...
     OCILogoff($db_conn);
@@ -293,3 +637,4 @@ if ($db_conn) {
 ?>
 
 </html>
+
