@@ -1,4 +1,4 @@
-D2G2
+Event Planner Web App
 ====
+Data-intensive web application - PHP and SQL. 
 
-CPSC 304 
